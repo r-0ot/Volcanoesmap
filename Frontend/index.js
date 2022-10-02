@@ -1,16 +1,22 @@
 import React from 'react';
-import App from './Ap';
+import App from './App';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
 import {Provider} from 'react-redux';
-import store from './store';
-import Volcanomap from './map';
-import Controls from './controls';
+import {volcanoRequest} from "./saga"
+import createSagaMiddleware from 'redux-saga';
+import {applyMiddleware, createStore} from 'redux';
+import rootReducer from './rootReducer';
 
+const sagaMiddleware = createSagaMiddleware();
+const store = createStore(rootReducer, applyMiddleware(sagaMiddleware));
+sagaMiddleware.run(volcanoRequest);
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
+   <Provider store = {store}>
    <App/>
+   </Provider>
 );
 
 // If you want to start measuring performance in your app, pass a function
