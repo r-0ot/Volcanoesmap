@@ -12,10 +12,10 @@ app.get("/volcanoes", function(req, res) {
     var region = req.query.region;
     var subregion = req.query.subregion;
     var sortBy = req.query.sortBy;
-    var pageSize = req.query.pageSize;
-    var pageNo = req.query.pageNo;
-    var peifrom = req.query.peifrom;
-    var peito = req.query.peito;
+    var pageSize = parseInt(req.query.pageSize);
+    var pageNo = parseInt(req.query.pageNo);
+    var peifrom = parseInt(req.query.peifrom);
+    var peito = parseInt(req.query.peito);
     var filterBy = req.query.filterBy;
     if( country && region && subregion)
     volcanoModel.find({Country : country, Region: region ,SubRegion: subregion }).skip((pageNo - 1)*pageSize).limit(pageSize)
