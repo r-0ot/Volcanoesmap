@@ -18,23 +18,23 @@ app.get("/volcanoes", function(req, res) {
     var peito = parseInt(req.query.peito);
     var filterBy = req.query.filterBy;
     if( country && region && subregion)
-    volcanoModel.find({Country : country, Region: region ,SubRegion: subregion }).skip((pageNo - 1)*pageSize).limit(pageSize)
+    volcanoModel.find({'properties.Country' : country, 'properties.Region' : region ,'properties.Subregion': subregion }).skip((pageNo - 1)*pageSize).limit(pageSize)
                 .then(data => res.send(data))
                 .catch(err => res.status(400));
     else if (sortBy == "VolcanonameAtoZ")
-    volcanoModel.find({}).sort({V_Name: 1}).skip((pageNo - 1)*pageSize).limit(pageSize)
+    volcanoModel.find({}).sort({'properties.V_Name': 1}).skip((pageNo - 1)*pageSize).limit(pageSize)
                 .then(data => res.send(data))
                 .catch(err => res.status(400));
     else if (sortBy == "VolcanonameZtoA")
-    volcanoModel.find({}).sort({V_Name: -1}).skip((pageNo - 1)*pageSize).limit(pageSize)
+    volcanoModel.find({}).sort({'properties.V_Name': -1}).skip((pageNo - 1)*pageSize).limit(pageSize)
                 .then(data => res.send(data))
                 .catch(err => res.status(400));
     else if (filterBy == "NoofvolcanoesbyCountry")
-    volcanoModel.aggregate({$group: {_id: "$Country", count: {$sum : 1} }},{$sort: {count: 1}}, {$skip: (pageNo - 1)*pageSize},{$limit : pageSize} )
+    volcanoModel.aggregate([{$group: {_id: "$properties.Country", count: {$sum : 1} }},{$sort: {count: -1}}, {$skip: (pageNo - 1)*pageSize},{$limit : pageSize} ])
                 .then(data => res.send(data))
                 .catch(err => res.status(400));
     else if(peifrom && peito)
-    volcanoModel.find({PEI : {$gt : peifrom , $lt: peito}}).sort({V_Name: -1}).skip((pageNo - 1)*pageSize).limit(pageSize)
+    volcanoModel.find({'properties.PEI' : {$gte : peifrom , $lte: peito}}).sort({'properties.V_Name': 1}).skip((pageNo - 1)*pageSize).limit(pageSize)
                 .then(data => res.send(data))
                 .catch(err => res.status(400));
     else
