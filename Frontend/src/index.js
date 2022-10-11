@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
 import {Provider} from 'react-redux';
-import {volcanoRequest} from "./saga"
+import {peiDataRequest, volcanoRequest} from "./saga"
 import createSagaMiddleware from 'redux-saga';
 import {applyMiddleware, createStore} from 'redux';
 import rootReducer from './rootReducer';
@@ -12,6 +12,7 @@ import rootReducer from './rootReducer';
 const sagaMiddleware = createSagaMiddleware();
 const store = createStore(rootReducer, applyMiddleware(sagaMiddleware));
 sagaMiddleware.run(volcanoRequest);
+sagaMiddleware.run(peiDataRequest);
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
    <Provider store = {store}>
